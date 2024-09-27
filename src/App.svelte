@@ -8,6 +8,31 @@
   var t = Array.from({length: 10}, (_, y) => 
     Array.from({length: 10}, (_, x) => aknak[y * 10 + x])
   )
+  const f = (x, y) => {
+    let cell = t[y][x]
+    if (jv) return
+    if (cell === '💣') {
+      cell = `💀`
+      jv = true
+      t[y][x] = cell
+    } else {
+      let asz = 0;
+      [1, 0, -1].forEach(i => [1, 0, -1].forEach(j => {
+        if (
+          t[y+i] && t[y+i][x+j] === '💣' ||
+          t[y+i] && t[y+i][x+j] === 'Z'
+        ) asz++ 
+      }))
+      t[y][x] = asz
+      if (asz == 0) {
+        [1, 0, -1].forEach(i => [1, 0, -1].forEach(j => {
+          if ((i || j) && t[y + i][x + j]===" ") {
+            f(x + j, y + i)
+          }
+        }))
+      }
+    }
+  }
 </script>
 <main>
   <h1>Aknakereső</h1>
@@ -15,25 +40,7 @@
     {#each t as row, y}
       <tr>
         {#each row as cell, x}
-          <td on:click={() => {
-            if (jv) return
-            if (cell === '💣') {
-              cell = `💀`
-              jv = true
-            } else {
-              let asz = 0;
-              [1,0,-1].forEach(i => [1,0,-1].forEach(j => {
-                if (
-                  t[y+i] && t[y+i][x+j] === '💣' ||
-                  t[y+i] && t[y+i][x+j] === 'Z'
-                ) asz++ 
-              }))
-              cell = asz
-              if (cell === 0) {
-                
-              }
-            }
-          }} on:contextmenu|preventDefault = {() => {
+          <td on:click={() => f(x, y)} on:contextmenu|preventDefault = {() => {
             if ('zZ'.includes(cell)) {
               cell = ' '
               return
