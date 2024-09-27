@@ -36,6 +36,17 @@
 </script>
 <main>
   <h1>Aknakereső</h1>
+  {#if jv}
+  <table>
+    {#each t as row, y}
+      <tr>
+        {#each row as cell, x}
+          <td>{'zZ'.includes(cell)? `📍` : cell}</td>
+        {/each}
+      </tr>
+    {/each}
+  </table>
+  {:else}
   <table>
     {#each t as row, y}
       <tr>
@@ -56,6 +67,7 @@
       </tr>
     {/each}
   </table>
+  {/if}
 </main>
 <style>
   td {
