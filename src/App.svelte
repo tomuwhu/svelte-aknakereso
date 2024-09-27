@@ -46,7 +46,7 @@
         <tr>
           {#each row as cell, x}
             <td class="eh {Number(cell) === cell
-                ? 'N': 'Zz'.includes(cell)? 'Z': cell === '💣'? 'B'
+                ? 'N': cell ==="Z" ? 'Z': cell === "z" ? "z" : cell === '💣'? 'B'
                 : cell === '💀' ? 'HF': ''}">{"zZ".includes(cell) ? `📍` : cell}</td>
           {/each}
         </tr>
@@ -63,7 +63,7 @@
               on:click={() => f(x, y)}
               on:contextmenu|preventDefault={() => {
                 if ("zZ".includes(cell)) {
-                  cell = " "
+                  cell = cell === "Z" ? "💣" : " "
                   return
                 }
                 cell = cell === "💣" ? "Z" : "z"
@@ -102,6 +102,7 @@
   td.norm:hover { background-color: lightgray; }
   td.N { background-color: rgb(96, 154, 154); }
   td.Z { background-color: rgb(236, 147, 99); }
+  td.z { background-color: rgb(123, 106, 232); }
   td.B { background-color: rgb(183, 75, 75); }
   td.HF { background-color: rgb(97, 7, 7); }
   td.N, td.Z, td.Z, td.HF { box-shadow: 1px 1px 3px inset black; }
