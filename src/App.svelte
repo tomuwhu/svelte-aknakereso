@@ -1,20 +1,20 @@
 <script>
   // @ts-nocheck
-  var jv = false;
-  const asz = 15;
+  var jv = false
+  const asz = 15
   var aknak = Array.from({ length: asz }, (_) => "💣")
     .concat(Array.from({ length: 100 - asz }, (_) => " "))
-    .sort((a, b) => Math.random() - 0.5);
+    .sort((a, b) => Math.random() - 0.5)
   var t = Array.from({ length: 10 }, (_, y) =>
-    Array.from({ length: 10 }, (_, x) => aknak[y * 10 + x]),
-  );
+    Array.from({ length: 10 }, (_, x) => aknak[y * 10 + x])
+  )
   const f = (x, y) => {
-    let cell = t[y][x];
-    if (jv) return;
+    let cell = t[y][x]
+    if (jv) return
     if (cell === "💣") {
-      cell = `💀`;
-      jv = true;
-      t[y][x] = cell;
+      cell = `💀`
+      jv = true
+      t[y][x] = cell
     } else {
       let asz = 0;
       [1, 0, -1].forEach((i) =>
@@ -22,22 +22,20 @@
           if (
             (t[y + i] && t[y + i][x + j] === "💣") ||
             (t[y + i] && t[y + i][x + j] === "Z")
-          )
-            asz++;
-        }),
-      );
-      t[y][x] = asz;
+          ) asz++
+        })
+      )
+      t[y][x] = asz
       if (asz == 0) {
         [1, 0, -1].forEach((i) =>
           [1, 0, -1].forEach((j) => {
-            if ((i || j) && t[y + i] && t[y + i][x + j] === " ") {
-              f(x + j, y + i);
-            }
-          }),
-        );
+            if ((i || j) && t[y + i] && t[y + i][x + j] === " ") 
+              f(x + j, y + i)
+          })
+        )
       }
     }
-  };
+  }
 </script>
 
 <main>
@@ -47,10 +45,9 @@
       {#each t as row, y}
         <tr>
           {#each row as cell, x}
-            <td class="eh {
-                Number(cell) === cell ? "N" : 
-                "Zz".includes(cell) ? "Z" : ""
-             }">{"zZ".includes(cell) ? `📍` : cell}</td>
+            <td class="eh {Number(cell) === cell
+                ? 'N': 'Zz'.includes(cell)? 'Z': cell === '💣'? 'B'
+                : cell === '💀' ? 'HF': ''}">{"zZ".includes(cell) ? `📍` : cell}</td>
           {/each}
         </tr>
       {/each}
@@ -61,21 +58,15 @@
         <tr>
           {#each row as cell, x}
             <td
-              class={
-                Number(cell) === cell ? "N" : 
-                "Zz".includes(cell) ? "Z" : ""
-              }
+              class="norm {Number(cell) === cell
+                ? 'N' : 'Zz'.includes(cell) ? 'Z': ''}"
               on:click={() => f(x, y)}
               on:contextmenu|preventDefault={() => {
                 if ("zZ".includes(cell)) {
-                  cell = " ";
-                  return;
+                  cell = " "
+                  return
                 }
-                if (cell === "💣") {
-                  cell = "Z";
-                } else {
-                  cell = "z";
-                }
+                cell = cell === "💣" ? "Z" : "z"
               }}>{cell === "💣" ? " " : "zZ".includes(cell) ? `📍` : cell}</td
             >
           {/each}
@@ -86,9 +77,15 @@
 </main>
 
 <style>
+  table {
+    background-color: antiquewhite;
+    border-spacing: 8px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 3px inset black;
+  }
   td.eh {
+    background-color: rgb(207, 230, 229);
     cursor: default;
-    background-color: rgb(186, 165, 139);
   }
   td {
     border: 1px solid black;
@@ -98,20 +95,14 @@
     vertical-align: middle;
     font-size: 24px;
     cursor: pointer;
-    background-color: rgb(150, 138, 123);
+    background-color: rgb(214, 196, 173);
     border-radius: 8px;
-    box-shadow: 1px 1px 3px inset black;
+    box-shadow: 1px 1px 3px black;
   }
-  td:hover {
-    background-color: lightgray;
-  }
-  td:hover {
-    background-color: rgb(186, 165, 139);
-  }
-  td.N {
-    background-color: rgb(17, 101, 101);
-  }
-  td.Z {
-    background-color: rgb(236, 147, 99);
-  }
+  td.norm:hover { background-color: lightgray; }
+  td.N { background-color: rgb(96, 154, 154); }
+  td.Z { background-color: rgb(236, 147, 99); }
+  td.B { background-color: rgb(183, 75, 75); }
+  td.HF { background-color: rgb(97, 7, 7); }
+  td.N, td.Z, td.Z, td.HF { box-shadow: 1px 1px 3px inset black; }
 </style>
