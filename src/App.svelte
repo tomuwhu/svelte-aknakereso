@@ -26,7 +26,7 @@
       t[y][x] = asz
       if (asz == 0) {
         [1, 0, -1].forEach(i => [1, 0, -1].forEach(j => {
-          if ((i || j) && t[y + i][x + j]===" ") {
+          if ((i || j) && t[y + i] && t[y + i][x + j]===" ") {
             f(x + j, y + i)
           }
         }))
