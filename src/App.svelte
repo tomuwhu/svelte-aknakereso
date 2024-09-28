@@ -1,16 +1,13 @@
 <script>
   // @ts-nocheck
   var jv = false
-  const [asz, n] = [15, { length: 10 }]
+  var [asz, n] = [17, { length: 10 }]
   var aknak = Array.from({ length: asz }, (_) => "💣")
     .concat(Array.from({ length: 100 - asz }, (_) => " "))
     .sort((a, b) => Math.random() - 0.5)
-  var t = Array.from(n, (_, y) =>
-    Array.from(n, (_, x) => aknak[y * 10 + x])
-  )
+  var t = Array.from(n, (_, y) => Array.from(n, (_, x) => aknak[y * 10 + x]))
   const f = (x, y) => {
     let cell = t[y][x]
-    if (jv) return
     if (cell === "💣") cell = `💀`, jv = true, t[y][x] = cell
     else {
       let asz = 0;
@@ -31,7 +28,8 @@
 
 <main>
   <h1>Aknakereső</h1>
-  {#if jv}
+  {#if jv || !asz}
+    {#if jv}<h2>Vesztett</h2>{:else}<h3>Nyert</h3>{/if}
     <table>
       {#each t as row, y}
         <tr>
@@ -54,9 +52,11 @@
               on:click={() => f(x, y)}
               on:contextmenu|preventDefault={() => {
                 if ("zZ".includes(cell)) {
+                  if (cell === "Z") asz++
                   cell = cell === "Z" ? "💣" : " "
                   return
                 }
+                if (cell === "💣") asz--
                 cell = cell === "💣" ? "Z" : "z"
               }}>{cell === "💣" ? " " : "zZ".includes(cell) ? `📍` : cell}</td
             >
@@ -68,6 +68,12 @@
 </main>
 
 <style>
+  h2 {
+    color:rgb(255, 90, 90);
+  }
+  h3 {
+    color:aquamarine
+  }
   table {
     background-color: antiquewhite;
     border-spacing: 8px;
