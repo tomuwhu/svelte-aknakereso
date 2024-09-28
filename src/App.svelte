@@ -1,39 +1,30 @@
 <script>
   // @ts-nocheck
   var jv = false
-  const asz = 15
+  const [asz, n] = [15, { length: 10 }]
   var aknak = Array.from({ length: asz }, (_) => "💣")
     .concat(Array.from({ length: 100 - asz }, (_) => " "))
     .sort((a, b) => Math.random() - 0.5)
-  var t = Array.from({ length: 10 }, (_, y) =>
-    Array.from({ length: 10 }, (_, x) => aknak[y * 10 + x])
+  var t = Array.from(n, (_, y) =>
+    Array.from(n, (_, x) => aknak[y * 10 + x])
   )
   const f = (x, y) => {
     let cell = t[y][x]
     if (jv) return
-    if (cell === "💣") {
-      cell = `💀`
-      jv = true
-      t[y][x] = cell
-    } else {
+    if (cell === "💣") cell = `💀`, jv = true, t[y][x] = cell
+    else {
       let asz = 0;
-      [1, 0, -1].forEach((i) =>
-        [1, 0, -1].forEach((j) => {
-          if (
+      [1, 0, -1].forEach((i) => [1, 0, -1].forEach((j) => 
             (t[y + i] && t[y + i][x + j] === "💣") ||
             (t[y + i] && t[y + i][x + j] === "Z")
-          ) asz++
-        })
-      )
+          ? asz++ : null
+      ))
       t[y][x] = asz
-      if (asz == 0) {
-        [1, 0, -1].forEach((i) =>
-          [1, 0, -1].forEach((j) => {
-            if ((i || j) && t[y + i] && t[y + i][x + j] === " ") 
-              f(x + j, y + i)
-          })
-        )
-      }
+      if (asz == 0) 
+        [1, 0, -1].forEach((i) => [1, 0, -1].forEach((j) => 
+            (i || j) && t[y + i] && t[y + i][x + j] === " "
+              ? f(x + j, y + i) : null
+        ))
     }
   }
 </script>
